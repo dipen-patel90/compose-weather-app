@@ -9,12 +9,14 @@ import androidx.compose.material3.Surface
 import androidx.compose.runtime.Composable
 import androidx.compose.ui.Modifier
 import androidx.compose.ui.tooling.preview.Preview
-import com.compose.weather.ui.theme.WeatherTheme
+import androidx.navigation.compose.rememberNavController
 import com.compose.weather.navigtion.ComponentNavigation
+import com.compose.weather.ui.theme.WeatherTheme
 import dagger.hilt.android.AndroidEntryPoint
 
 @AndroidEntryPoint
 class MainActivity : ComponentActivity() {
+
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
         setContent {
@@ -31,7 +33,8 @@ fun InitView() {
             modifier = Modifier.fillMaxSize(),
             color = MaterialTheme.colorScheme.background
         ) {
-            ComponentNavigation()
+            val navController = rememberNavController()
+            ComponentNavigation(navController)
         }
     }
 }
@@ -41,3 +44,4 @@ fun InitView() {
 fun DefaultPreview() {
     InitView()
 }
+

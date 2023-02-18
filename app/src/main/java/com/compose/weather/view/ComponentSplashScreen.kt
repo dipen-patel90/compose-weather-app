@@ -1,23 +1,79 @@
 package com.compose.weather.view
 
+import androidx.compose.animation.AnimatedVisibility
+import androidx.compose.animation.core.tween
+import androidx.compose.animation.fadeIn
+import androidx.compose.animation.fadeOut
+import androidx.compose.foundation.background
+import androidx.compose.foundation.layout.Arrangement
 import androidx.compose.foundation.layout.Column
+import androidx.compose.foundation.layout.fillMaxSize
 import androidx.compose.material3.Button
 import androidx.compose.material3.Text
-import androidx.compose.runtime.Composable
+import androidx.compose.runtime.*
 import androidx.compose.ui.Alignment
+import androidx.compose.ui.Modifier
+import androidx.compose.ui.graphics.Color
 import androidx.compose.ui.tooling.preview.Preview
-import androidx.navigation.NavController
-import androidx.navigation.compose.rememberNavController
 import com.compose.weather.navigtion.Route
+import kotlinx.coroutines.delay
 
 @Composable
-fun ComponentSplashScreen(navController: NavController) {
-    Column(horizontalAlignment = Alignment.CenterHorizontally) {
-        Text(text = "splash screen")
-        Button(onClick = {
-            navController.navigate(Route.Login.createRoute(123, "dipen.ptl1", "abc"))
-        }) {
-            Text(text = "Click To Login")
+fun ComponentSplashScreen(navigateToLogin: (route: String) -> Unit) {
+
+    var visibleThe by remember { mutableStateOf(false) }
+    var visibleWeather by remember { mutableStateOf(false) }
+    var visibleToday by remember { mutableStateOf(false) }
+
+    // If we use "rememberSaveable" instead of "remember",
+    // state will be saved across the orientation
+//    var visibleThe by rememberSaveable { mutableStateOf(false) }
+//    var visibleWeather by rememberSaveable { mutableStateOf(false) }
+//    var visibleToday by rememberSaveable { mutableStateOf(false) }
+
+    LaunchedEffect(key1 = Unit) {
+        delay(300)
+        visibleThe = true
+        delay(500)
+        visibleWeather = true
+        delay(500)
+        visibleToday = true
+        delay(500)
+        navigateToLogin.invoke(Route.Login.createRoute())
+    }
+
+    Column(
+        modifier = Modifier
+            .fillMaxSize()
+            .background(Color.Cyan),
+        horizontalAlignment = Alignment.CenterHorizontally,
+        verticalArrangement = Arrangement.Center
+    ) {
+        Button(onClick = {}) {
+            Text(text = "How's")
+        }
+        AnimatedVisibility(
+            visible = visibleThe,
+        ) {
+            Button(onClick = {}) {
+                Text(text = "the")
+            }
+        }
+        AnimatedVisibility(
+            visible = visibleWeather,
+            enter = fadeIn(animationSpec = tween(1000)),
+            exit = fadeOut(animationSpec = tween(1000))
+        ) {
+            Button(onClick = {}) {
+                Text(text = "        Weather        ")
+            }
+        }
+        AnimatedVisibility(
+            visible = visibleToday,
+        ) {
+            Button(onClick = {}) {
+                Text(text = "Today")
+            }
         }
     }
 }
@@ -25,5 +81,7 @@ fun ComponentSplashScreen(navController: NavController) {
 @Preview(showBackground = true)
 @Composable
 private fun Preview() {
-    ComponentSplashScreen(rememberNavController())
+    ComponentSplashScreen {
+
+    }
 }
