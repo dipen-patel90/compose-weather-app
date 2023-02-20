@@ -1,5 +1,6 @@
 package com.compose.weather.view
 
+import android.content.res.Resources.Theme
 import androidx.compose.animation.AnimatedVisibility
 import androidx.compose.animation.core.tween
 import androidx.compose.animation.fadeIn
@@ -9,6 +10,7 @@ import androidx.compose.foundation.layout.Arrangement
 import androidx.compose.foundation.layout.Column
 import androidx.compose.foundation.layout.fillMaxSize
 import androidx.compose.material3.Button
+import androidx.compose.material3.MaterialTheme
 import androidx.compose.material3.Text
 import androidx.compose.runtime.*
 import androidx.compose.ui.Alignment
@@ -16,6 +18,7 @@ import androidx.compose.ui.Modifier
 import androidx.compose.ui.graphics.Color
 import androidx.compose.ui.tooling.preview.Preview
 import com.compose.weather.navigtion.Route
+import com.compose.weather.ui.theme.WeatherTheme
 import kotlinx.coroutines.delay
 
 @Composable
@@ -45,7 +48,7 @@ fun ComponentSplashScreen(navigateToLogin: (route: String) -> Unit) {
     Column(
         modifier = Modifier
             .fillMaxSize()
-            .background(Color.Cyan),
+            .background(MaterialTheme.colorScheme.secondary),
         horizontalAlignment = Alignment.CenterHorizontally,
         verticalArrangement = Arrangement.Center
     ) {
