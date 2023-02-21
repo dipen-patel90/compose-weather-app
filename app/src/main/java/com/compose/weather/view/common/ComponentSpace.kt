@@ -1,4 +1,4 @@
-package com.compose.weather.view
+package com.compose.weather.view.common
 
 import androidx.compose.foundation.layout.PaddingValues
 import androidx.compose.foundation.layout.Spacer

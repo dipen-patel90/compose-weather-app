@@ -1,4 +1,4 @@
-package com.compose.weather.view
+package com.compose.weather.view.common
 
 import androidx.activity.compose.BackHandler
 import androidx.compose.foundation.background

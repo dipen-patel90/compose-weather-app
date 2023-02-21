@@ -3,4 +3,9 @@
     <string name="login_id">Login Id</string>
     <string name="password">Password</string>
     <string name="login">Login</string>
+    <string name="login_id_length_error">Login id must be at least 4 character long</string>
+    <string name="password_length_error">Password must be at least 8 character long</string>
+
+    <string name="empty"/>
+
 </resources>

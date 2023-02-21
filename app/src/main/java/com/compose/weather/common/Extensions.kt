@@ -14,10 +14,10 @@ fun Bundle.getStringOrThrowException(key: String): String {
 fun String.Companion.empty() = ""
 
 @Composable
-fun mutableStateValue(state: MutableStateFlow<String>): String {
+fun <T> getMutableStateValue(state: MutableStateFlow<T>): T {
     return state.collectAsState().value
 }
 
-fun setMutableStateValue(state: MutableStateFlow<String>, value: String) {
+fun <T> setMutableStateValue(state: MutableStateFlow<T>, value: T) {
     state.value = value
 }

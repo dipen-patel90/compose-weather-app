@@ -1,4 +1,4 @@
-package com.compose.weather.view
+package com.compose.weather.view.home
 
 import androidx.compose.material3.Text
 import androidx.compose.runtime.Composable

@@ -5,8 +5,8 @@ import androidx.navigation.NavHostController
 import androidx.navigation.compose.NavHost
 import androidx.navigation.compose.composable
 import com.compose.weather.common.getStringOrThrowException
-import com.compose.weather.view.ComponentHomeScreen
-import com.compose.weather.view.ComponentSplashScreen
+import com.compose.weather.view.home.ComponentHomeScreen
+import com.compose.weather.view.splash.ComponentSplashScreen
 import com.compose.weather.view.login.ComponentLoginScreen
 
 @Composable
@@ -18,12 +18,14 @@ fun ComponentNavigation(navController: NavHostController) {
         ) {
             ComponentSplashScreen(navigateToLogin = {
                 navController.navigate(it) {
+                    // clear stack till Splash screen
                     popUpTo(Route.Splash.route) {
                         inclusive = true
                     }
                 }
             }, navigateToHome = {
                 navController.navigate(it) {
+                    // clear stack till Splash screen
                     popUpTo(Route.Splash.route) {
                         inclusive = true
                     }
@@ -35,7 +37,8 @@ fun ComponentNavigation(navController: NavHostController) {
         ) {
             ComponentLoginScreen(navigateToHome = {
                 navController.navigate(it) {
-                    popUpTo(Route.Splash.route) {
+                    // clear stack till Login screen as Splash is already cleared
+                    popUpTo(Route.Login.route) {
                         inclusive = true
                     }
                 }

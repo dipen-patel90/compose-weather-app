@@ -1,4 +1,4 @@
-package com.compose.weather.view
+package com.compose.weather.view.splash
 
 import androidx.compose.animation.AnimatedVisibility
 import androidx.compose.animation.core.tween
