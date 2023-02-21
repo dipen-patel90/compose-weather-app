@@ -1,18 +1,26 @@
 package com.compose.weather.navigtion
 
+import androidx.compose.foundation.layout.PaddingValues
+import androidx.compose.foundation.layout.padding
 import androidx.compose.runtime.Composable
+import androidx.compose.ui.Modifier
 import androidx.navigation.NavHostController
 import androidx.navigation.compose.NavHost
 import androidx.navigation.compose.composable
 import com.compose.weather.common.getStringOrThrowException
-import com.compose.weather.view.home.ComponentHomeScreen
-import com.compose.weather.view.splash.ComponentSplashScreen
+import com.compose.weather.preferences.SharedPrefsManager
+import com.compose.weather.view.dashboard.ComponentDashboardScreen
 import com.compose.weather.view.login.ComponentLoginScreen
+import com.compose.weather.view.splash.ComponentSplashScreen
 
 @Composable
-fun ComponentNavigation(navController: NavHostController) {
+fun ComponentNavigation(navController: NavHostController, paddingValues: PaddingValues) {
 
-    NavHost(navController, startDestination = Route.Splash.route) {
+    NavHost(
+        navController = navController,
+        startDestination = Route.Splash.route,
+        modifier = Modifier.padding(paddingValues)
+    ) {
         composable(
             route = Route.Splash.route
         ) {
@@ -35,7 +43,7 @@ fun ComponentNavigation(navController: NavHostController) {
         composable(
             route = Route.Login.route,
         ) {
-            ComponentLoginScreen(navigateToHome = {
+            ComponentLoginScreen(navigateToDashboard = {
                 navController.navigate(it) {
                     // clear stack till Login screen as Splash is already cleared
                     popUpTo(Route.Login.route) {
@@ -45,12 +53,21 @@ fun ComponentNavigation(navController: NavHostController) {
             })
         }
         composable(
-            route = Route.Home.route,
-            arguments = Route.Home.argumentsList
+            route = Route.Dashboard.route,
+            arguments = Route.Dashboard.argumentsList
         ) {
             it.arguments?.apply {
-                val userName = getStringOrThrowException(Route.Home.USER_NAME)
-                ComponentHomeScreen(userName)
+                val userName = getStringOrThrowException(Route.Dashboard.USER_NAME)
+                ComponentDashboardScreen(userName, logout = {
+                    SharedPrefsManager.clearSession()
+
+                    navController.navigate(Route.Splash.route) {
+                        // clear stack till Splash screen
+                        popUpTo(Route.Splash.route) {
+                            inclusive = true
+                        }
+                    }
+                })
             }
         }
     }

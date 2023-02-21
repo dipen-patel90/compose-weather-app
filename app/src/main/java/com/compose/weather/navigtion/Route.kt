@@ -10,7 +10,7 @@ sealed class Route(val route: String) {
         fun createRoute() = "login"
     }
 
-    object Home : Route("home/{username}") {
+    object Dashboard : Route("dashboard/{username}") {
         const val USER_NAME = "username"
 
         val argumentsList = listOf(
@@ -18,8 +18,15 @@ sealed class Route(val route: String) {
         )
 
         fun createRoute(userName: String) =
-            "home/$userName"
+            "dashboard/$userName"
     }
+
+    object Home : Route("home")
+    object Settings : Route("settings")
+
+    object Profile : Route("profile")
+    object About : Route("about")
+
 //    object Login : Route("login/{loginid}/{username}?lastname={lastname}") {
 //        const val LOGIN_ID = "loginid"
 //        const val USER_NAME = "username"

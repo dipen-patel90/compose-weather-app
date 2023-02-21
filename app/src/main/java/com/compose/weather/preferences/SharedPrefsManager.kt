@@ -18,6 +18,11 @@ object SharedPrefsManager {
         set(value) {
             sharedPrefs[USER_ID] = value
         }
+
+    fun clearSession() {
+        isUserLoggedIn = false
+        userId = String.empty()
+    }
 }
 
 @Suppress("UNCHECKED_CAST")

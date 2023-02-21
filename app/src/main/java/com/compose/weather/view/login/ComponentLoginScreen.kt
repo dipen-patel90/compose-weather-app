@@ -32,7 +32,7 @@ import kotlinx.coroutines.flow.collectLatest
 
 @Composable
 fun ComponentLoginScreen(
-    navigateToHome: (route: String) -> Unit,
+    navigateToDashboard: (route: String) -> Unit,
     vm: LoginScreenViewModel = viewModel()
 ) {
     val loginState by vm.loginState.collectAsStateWithLifecycle()
@@ -40,7 +40,7 @@ fun ComponentLoginScreen(
     LaunchedEffect(key1 = loginState, block = {
         if (loginState == LoginState.Success) {
             Log.d("Login", "Login SUCCESS ## Moving to Home screen")
-            navigateToHome.invoke(Route.Home.createRoute(vm.uiLogin.loginId.state.value))
+            navigateToDashboard.invoke(Route.Dashboard.createRoute(vm.uiLogin.loginId.state.value))
         } else if (loginState is LoginState.Failure) {
             val message = (loginState as LoginState.Failure).errorMessage
             Toast.makeText(context, message, Toast.LENGTH_LONG).show()
