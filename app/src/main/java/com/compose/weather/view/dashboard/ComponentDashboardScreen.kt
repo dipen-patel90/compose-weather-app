@@ -21,7 +21,7 @@ import androidx.navigation.compose.currentBackStackEntryAsState
 import androidx.navigation.compose.rememberNavController
 import com.compose.weather.R
 import com.compose.weather.common.empty
-import com.compose.weather.navigtion.ComponentNavigationHome
+import com.compose.weather.navigtion.HomeNavigation
 import com.compose.weather.navigtion.Route
 import kotlinx.coroutines.delay
 import kotlinx.coroutines.launch
@@ -39,20 +39,21 @@ fun ComponentDashboardScreen(
         listOf(
             BottomNavItem(
                 title = "Home",
-                route = Route.Home.route,
+                route = Route.HomeNav.Home.route,
                 icon = Icons.Rounded.Home,
             ),
             BottomNavItem(
                 title = "Settings",
-                route = Route.Settings.route,
+                route = Route.HomeNav.Settings.route,
                 icon = Icons.Rounded.Settings,
             )
         )
     }
+    // Show topBar, drawerContent & bottomBar for only these screens
     val topBottomBarDrawer = remember {
         listOf(
-            Route.Home.route,
-            Route.Settings.route
+            Route.HomeNav.Home.route,
+            Route.HomeNav.Settings.route
         )
     }
     val backStackEntry = navController.currentBackStackEntryAsState()
@@ -89,7 +90,7 @@ fun ComponentDashboardScreen(
             }
         }
     ) { paddingValues ->
-        ComponentNavigationHome(navController, paddingValues, username) {
+        HomeNavigation(navController, paddingValues, username) {
             logout.invoke()
         }
     }
@@ -117,12 +118,12 @@ private fun TopBar(title: String?, onNavIconClick: () -> Unit) {
 @Composable
 private fun DrawerContent(onItemClick: (route: String) -> Unit) {
     Button(onClick = {
-        onItemClick.invoke(Route.Profile.route)
+        onItemClick.invoke(Route.HomeNav.Profile.route)
     }) {
         Text(text = stringResource(id = R.string.profile))
     }
     Button(onClick = {
-        onItemClick.invoke(Route.About.route)
+        onItemClick.invoke(Route.HomeNav.About.route)
     }) {
         Text(text = stringResource(id = R.string.about))
     }

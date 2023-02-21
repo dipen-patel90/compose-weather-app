@@ -14,58 +14,57 @@ import com.compose.weather.view.login.ComponentLoginScreen
 import com.compose.weather.view.splash.ComponentSplashScreen
 
 @Composable
-fun ComponentNavigation(navController: NavHostController, paddingValues: PaddingValues) {
+fun AuthNavigation(navController: NavHostController, paddingValues: PaddingValues) {
 
     NavHost(
         navController = navController,
-        startDestination = Route.Splash.route,
+        startDestination = Route.AuthNav.Splash.route,
         modifier = Modifier.padding(paddingValues)
     ) {
         composable(
-            route = Route.Splash.route
+            route = Route.AuthNav.Splash.route
         ) {
             ComponentSplashScreen(navigateToLogin = {
                 navController.navigate(it) {
                     // clear stack till Splash screen
-                    popUpTo(Route.Splash.route) {
+                    popUpTo(Route.AuthNav.Splash.route) {
                         inclusive = true
                     }
                 }
             }, navigateToHome = {
                 navController.navigate(it) {
                     // clear stack till Splash screen
-                    popUpTo(Route.Splash.route) {
+                    popUpTo(Route.AuthNav.Splash.route) {
                         inclusive = true
                     }
                 }
             })
         }
         composable(
-            route = Route.Login.route,
+            route = Route.AuthNav.Login.route,
         ) {
             ComponentLoginScreen(navigateToDashboard = {
                 navController.navigate(it) {
                     // clear stack till Login screen as Splash is already cleared
-                    popUpTo(Route.Login.route) {
+                    popUpTo(Route.AuthNav.Login.route) {
                         inclusive = true
                     }
                 }
             })
         }
         composable(
-            route = Route.Dashboard.route,
-            arguments = Route.Dashboard.argumentsList
+            route = Route.AuthNav.Dashboard.route,
+            arguments = Route.AuthNav.Dashboard.argumentsList
         ) {
             it.arguments?.apply {
-                val userName = getStringOrThrowException(Route.Dashboard.USER_NAME)
+                val userName = getStringOrThrowException(Route.AuthNav.Dashboard.USER_NAME)
                 ComponentDashboardScreen(userName, logout = {
+                    // Clear the current session
                     SharedPrefsManager.clearSession()
 
-                    navController.navigate(Route.Splash.route) {
-                        // clear stack till Splash screen
-                        popUpTo(Route.Splash.route) {
-                            inclusive = true
-                        }
+                    // Navigate to splash screen and clear all the back stack
+                    navController.navigate(Route.AuthNav.Splash.route) {
+                        navController.backQueue.clear()
                     }
                 })
             }

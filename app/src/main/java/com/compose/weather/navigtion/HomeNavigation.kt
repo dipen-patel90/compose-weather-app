@@ -13,7 +13,7 @@ import com.compose.weather.view.profile.ComponentProfileScreen
 import com.compose.weather.view.settings.ComponentSettingsScreen
 
 @Composable
-fun ComponentNavigationHome(
+fun HomeNavigation(
     navController: NavHostController,
     paddingValues: PaddingValues,
     username: String,
@@ -21,35 +21,30 @@ fun ComponentNavigationHome(
 ) {
     NavHost(
         navController = navController,
-        startDestination = Route.Home.route,
+        startDestination = Route.HomeNav.Home.route,
         modifier = Modifier.padding(paddingValues)
     ) {
         composable(
-            route = Route.Home.route
+            route = Route.HomeNav.Home.route
         ) {
             ComponentHomeScreen(username)
         }
         composable(
-            route = Route.Settings.route,
+            route = Route.HomeNav.Settings.route,
         ) {
             ComponentSettingsScreen {
-                navController.navigate(Route.Home.route) {
-                    popUpTo(Route.Home.route) {
-                        inclusive = true
-                        logout.invoke()
-                    }
-                }
+                logout.invoke()
             }
         }
 
         composable(
-            route = Route.Profile.route,
+            route = Route.HomeNav.Profile.route,
         ) {
             ComponentProfileScreen()
         }
 
         composable(
-            route = Route.About.route,
+            route = Route.HomeNav.About.route,
         ) {
             ComponentAboutScreen()
         }

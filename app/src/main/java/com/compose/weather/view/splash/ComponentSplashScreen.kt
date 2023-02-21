@@ -44,9 +44,9 @@ fun ComponentSplashScreen(
         visibleToday = true
         delay(500)
         if (SharedPrefsManager.isUserLoggedIn) {
-            navigateToHome.invoke(Route.Dashboard.createRoute(SharedPrefsManager.userId))
+            navigateToHome.invoke(Route.AuthNav.Dashboard.createRoute(SharedPrefsManager.userId))
         } else {
-            navigateToLogin.invoke(Route.Login.createRoute())
+            navigateToLogin.invoke(Route.AuthNav.Login.createRoute())
         }
     }
 

@@ -40,7 +40,7 @@ fun ComponentLoginScreen(
     LaunchedEffect(key1 = loginState, block = {
         if (loginState == LoginState.Success) {
             Log.d("Login", "Login SUCCESS ## Moving to Home screen")
-            navigateToDashboard.invoke(Route.Dashboard.createRoute(vm.uiLogin.loginId.state.value))
+            navigateToDashboard.invoke(Route.AuthNav.Dashboard.createRoute(vm.uiLogin.loginId.state.value))
         } else if (loginState is LoginState.Failure) {
             val message = (loginState as LoginState.Failure).errorMessage
             Toast.makeText(context, message, Toast.LENGTH_LONG).show()

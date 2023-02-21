@@ -11,7 +11,7 @@ import androidx.compose.runtime.Composable
 import androidx.compose.ui.Modifier
 import androidx.compose.ui.tooling.preview.Preview
 import androidx.navigation.compose.rememberNavController
-import com.compose.weather.navigtion.ComponentNavigation
+import com.compose.weather.navigtion.AuthNavigation
 import com.compose.weather.ui.theme.WeatherTheme
 import dagger.hilt.android.AndroidEntryPoint
 
@@ -39,7 +39,7 @@ fun InitView() {
         ) {
 
             Scaffold { paddingValues ->
-                ComponentNavigation(navController, paddingValues)
+                AuthNavigation(navController, paddingValues)
             }
         }
     }
