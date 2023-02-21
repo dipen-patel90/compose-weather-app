@@ -6,8 +6,8 @@ import androidx.navigation.compose.NavHost
 import androidx.navigation.compose.composable
 import com.compose.weather.common.getStringOrThrowException
 import com.compose.weather.view.ComponentHomeScreen
-import com.compose.weather.view.ComponentLoginScreen
 import com.compose.weather.view.ComponentSplashScreen
+import com.compose.weather.view.login.ComponentLoginScreen
 
 @Composable
 fun ComponentNavigation(navController: NavHostController) {
@@ -17,17 +17,29 @@ fun ComponentNavigation(navController: NavHostController) {
             route = Route.Splash.route
         ) {
             ComponentSplashScreen(navigateToLogin = {
-                navController.navigate(it)
+                navController.navigate(it) {
+                    popUpTo(Route.Splash.route) {
+                        inclusive = true
+                    }
+                }
+            }, navigateToHome = {
+                navController.navigate(it) {
+                    popUpTo(Route.Splash.route) {
+                        inclusive = true
+                    }
+                }
             })
         }
         composable(
             route = Route.Login.route,
         ) {
-            it.arguments?.apply {
-                ComponentLoginScreen(navigateToHome = {
-                    navController.navigate(it)
-                })
-            }
+            ComponentLoginScreen(navigateToHome = {
+                navController.navigate(it) {
+                    popUpTo(Route.Splash.route) {
+                        inclusive = true
+                    }
+                }
+            })
         }
         composable(
             route = Route.Home.route,

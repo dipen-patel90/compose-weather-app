@@ -75,6 +75,9 @@ dependencies {
 
     // collectAsStateWithLifecycle()
     implementation "androidx.lifecycle:lifecycle-runtime-compose:2.6.0-beta01"
+
+    //GSON
+    implementation "com.google.code.gson:gson:2.8.9"
 }
 
 // Allow references to generated code

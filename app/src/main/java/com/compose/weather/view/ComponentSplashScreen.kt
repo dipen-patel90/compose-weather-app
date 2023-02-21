@@ -1,6 +1,5 @@
 package com.compose.weather.view
 
-import android.content.res.Resources.Theme
 import androidx.compose.animation.AnimatedVisibility
 import androidx.compose.animation.core.tween
 import androidx.compose.animation.fadeIn
@@ -15,14 +14,16 @@ import androidx.compose.material3.Text
 import androidx.compose.runtime.*
 import androidx.compose.ui.Alignment
 import androidx.compose.ui.Modifier
-import androidx.compose.ui.graphics.Color
 import androidx.compose.ui.tooling.preview.Preview
 import com.compose.weather.navigtion.Route
-import com.compose.weather.ui.theme.WeatherTheme
+import com.compose.weather.preferences.SharedPrefsManager
 import kotlinx.coroutines.delay
 
 @Composable
-fun ComponentSplashScreen(navigateToLogin: (route: String) -> Unit) {
+fun ComponentSplashScreen(
+    navigateToLogin: (route: String) -> Unit,
+    navigateToHome: (route: String) -> Unit
+) {
 
     var visibleThe by remember { mutableStateOf(false) }
     var visibleWeather by remember { mutableStateOf(false) }
@@ -42,7 +43,11 @@ fun ComponentSplashScreen(navigateToLogin: (route: String) -> Unit) {
         delay(500)
         visibleToday = true
         delay(500)
-        navigateToLogin.invoke(Route.Login.createRoute())
+        if (SharedPrefsManager.isUserLoggedIn) {
+            navigateToHome.invoke(Route.Home.createRoute(SharedPrefsManager.userId))
+        } else {
+            navigateToLogin.invoke(Route.Login.createRoute())
+        }
     }
 
     Column(
@@ -84,7 +89,5 @@ fun ComponentSplashScreen(navigateToLogin: (route: String) -> Unit) {
 @Preview(showBackground = true)
 @Composable
 private fun Preview() {
-    ComponentSplashScreen {
-
-    }
+    ComponentSplashScreen({}, {})
 }
