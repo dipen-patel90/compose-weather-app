@@ -8,13 +8,17 @@ import androidx.compose.foundation.background
 import androidx.compose.foundation.layout.Arrangement
 import androidx.compose.foundation.layout.Column
 import androidx.compose.foundation.layout.fillMaxSize
+import androidx.compose.foundation.layout.padding
 import androidx.compose.material3.Button
 import androidx.compose.material3.MaterialTheme
 import androidx.compose.material3.Text
 import androidx.compose.runtime.*
 import androidx.compose.ui.Alignment
 import androidx.compose.ui.Modifier
+import androidx.compose.ui.res.stringResource
 import androidx.compose.ui.tooling.preview.Preview
+import androidx.compose.ui.unit.dp
+import com.compose.weather.R
 import com.compose.weather.navigtion.Route
 import com.compose.weather.preferences.SharedPrefsManager
 import kotlinx.coroutines.delay
@@ -58,13 +62,13 @@ fun ComponentSplashScreen(
         verticalArrangement = Arrangement.Center
     ) {
         Button(onClick = {}) {
-            Text(text = "How's")
+            Text(text = stringResource(id = R.string.hows))
         }
         AnimatedVisibility(
             visible = visibleThe,
         ) {
             Button(onClick = {}) {
-                Text(text = "the")
+                Text(text = stringResource(id = R.string.the))
             }
         }
         AnimatedVisibility(
@@ -73,14 +77,17 @@ fun ComponentSplashScreen(
             exit = fadeOut(animationSpec = tween(1000))
         ) {
             Button(onClick = {}) {
-                Text(text = "        Weather        ")
+                Text(
+                    modifier = Modifier.padding(horizontal = 24.dp),
+                    text = stringResource(id = R.string.weather)
+                )
             }
         }
         AnimatedVisibility(
             visible = visibleToday,
         ) {
             Button(onClick = {}) {
-                Text(text = "Today")
+                Text(text = stringResource(id = R.string.today))
             }
         }
     }

@@ -1,11 +1,13 @@
 package com.compose.weather.view.common
 
+import androidx.compose.foundation.layout.fillMaxWidth
 import androidx.compose.foundation.text.KeyboardOptions
 import androidx.compose.material3.ExperimentalMaterial3Api
 import androidx.compose.material3.MaterialTheme
 import androidx.compose.material3.OutlinedTextField
 import androidx.compose.material3.Text
 import androidx.compose.runtime.Composable
+import androidx.compose.ui.Modifier
 import androidx.compose.ui.res.stringResource
 import androidx.compose.ui.text.input.KeyboardType
 import androidx.compose.ui.text.input.PasswordVisualTransformation
@@ -18,6 +20,7 @@ import com.compose.weather.view.login.UITextField
 @Composable
 fun OutlinedTextFieldWithError(uiTextField: UITextField, label: Int, isPassword: Boolean = false) {
     OutlinedTextField(
+        modifier = Modifier.fillMaxWidth(fraction = 0.8f),
         label = { Text(stringResource(id = label)) },
         value = getMutableStateValue(state = uiTextField.state),
         onValueChange = {
@@ -30,6 +33,7 @@ fun OutlinedTextFieldWithError(uiTextField: UITextField, label: Int, isPassword:
 
     if (uiTextField.showError) {
         Text(
+            modifier = Modifier.fillMaxWidth(fraction = 0.8f),
             text = stringResource(id = uiTextField.errorMessage),
             color = MaterialTheme.colorScheme.error
         )

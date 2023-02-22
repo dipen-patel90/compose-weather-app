@@ -4,20 +4,20 @@ import com.compose.weather.R
 import kotlinx.coroutines.flow.MutableStateFlow
 
 data class UILogin(
-    val loginId: UITextField = UITextField(),
+    val username: UITextField = UITextField(),
     val password: UITextField = UITextField(),
     var enableLoginButton: MutableStateFlow<Boolean> = MutableStateFlow(false)
 ) {
     fun validate() {
 
-        loginId.apply {
+        username.apply {
             val login = state.value
             val loginLength = login.length
 
             hasError = login.isEmpty() || loginLength < 4
             showError = login.isNotEmpty() && hasError
             errorMessage = if (loginLength < 4) {
-                R.string.login_id_length_error
+                R.string.username_length_error
             } else R.string.empty
         }
 
@@ -34,6 +34,6 @@ data class UILogin(
     }
 
     fun hasError(): Boolean {
-        return loginId.hasError || password.hasError
+        return username.hasError || password.hasError
     }
 }

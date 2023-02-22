@@ -7,19 +7,19 @@ import androidx.compose.foundation.layout.Column
 import androidx.compose.foundation.layout.fillMaxHeight
 import androidx.compose.foundation.layout.fillMaxWidth
 import androidx.compose.material3.Button
+import androidx.compose.material3.MaterialTheme
 import androidx.compose.material3.Text
 import androidx.compose.runtime.Composable
 import androidx.compose.runtime.LaunchedEffect
 import androidx.compose.runtime.getValue
 import androidx.compose.ui.Alignment
 import androidx.compose.ui.Modifier
-import androidx.compose.ui.graphics.Color
 import androidx.compose.ui.platform.LocalContext
 import androidx.compose.ui.res.stringResource
 import androidx.compose.ui.tooling.preview.Preview
 import androidx.compose.ui.unit.dp
+import androidx.hilt.navigation.compose.hiltViewModel
 import androidx.lifecycle.compose.collectAsStateWithLifecycle
-import androidx.lifecycle.viewmodel.compose.viewModel
 import com.compose.weather.R
 import com.compose.weather.common.getMutableStateValue
 import com.compose.weather.navigtion.Route
@@ -33,14 +33,14 @@ import kotlinx.coroutines.flow.collectLatest
 @Composable
 fun ComponentLoginScreen(
     navigateToDashboard: (route: String) -> Unit,
-    vm: LoginScreenViewModel = viewModel()
+    vm: LoginScreenViewModel = hiltViewModel()
 ) {
     val loginState by vm.loginState.collectAsStateWithLifecycle()
     val context = LocalContext.current
     LaunchedEffect(key1 = loginState, block = {
         if (loginState == LoginState.Success) {
             Log.d("Login", "Login SUCCESS ## Moving to Home screen")
-            navigateToDashboard.invoke(Route.AuthNav.Dashboard.createRoute(vm.uiLogin.loginId.state.value))
+            navigateToDashboard.invoke(Route.AuthNav.Dashboard.createRoute(vm.uiLogin.username.state.value))
         } else if (loginState is LoginState.Failure) {
             val message = (loginState as LoginState.Failure).errorMessage
             Toast.makeText(context, message, Toast.LENGTH_LONG).show()
@@ -86,11 +86,11 @@ private fun Content(vm: LoginScreenViewModel) {
         Modifier
             .fillMaxWidth()
             .fillMaxHeight(0.5f)
-            .background(Color.LightGray),
+            .background(MaterialTheme.colorScheme.background),
         horizontalAlignment = Alignment.CenterHorizontally
     ) {
         SpaceTop(20.dp)
-        OutlinedTextFieldWithError(vm.uiLogin.loginId, R.string.login_id)
+        OutlinedTextFieldWithError(vm.uiLogin.username, R.string.username)
         SpaceTop(12.dp)
         OutlinedTextFieldWithError(vm.uiLogin.password, R.string.password, true)
 

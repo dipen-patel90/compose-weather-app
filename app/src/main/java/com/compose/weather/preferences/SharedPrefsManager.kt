@@ -19,9 +19,16 @@ object SharedPrefsManager {
             sharedPrefs[USER_ID] = value
         }
 
+    var token: String
+        get() = sharedPrefs.get(TOKEN, String.empty())
+        set(value) {
+            sharedPrefs[TOKEN] = value
+        }
+
     fun clearSession() {
         isUserLoggedIn = false
         userId = String.empty()
+        token = String.empty()
     }
 }
 
