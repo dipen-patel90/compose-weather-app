@@ -70,7 +70,7 @@ dependencies {
     // NAVIGATION
     implementation "androidx.navigation:navigation-compose:$nav_version"
 
-    // OutlinedTextField
+    // For drawerContent(ComponentDashboardScreen) & ModalBottomSheetLayout(BottomSheetLayout)
     implementation "androidx.compose.material:material:$compose_version"
 
     // collectAsStateWithLifecycle()
