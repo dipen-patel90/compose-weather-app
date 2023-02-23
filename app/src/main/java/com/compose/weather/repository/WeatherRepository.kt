@@ -10,7 +10,7 @@ interface WeatherRepository {
     ): Response<CityWeatherResponse>
 
     suspend fun getWeatherDetail(
-        lat: Float,
-        lon: Float
-    ): Response<Unit>
+        lat: Double,
+        lon: Double
+    ): Response<CityWeatherResponse>
 }

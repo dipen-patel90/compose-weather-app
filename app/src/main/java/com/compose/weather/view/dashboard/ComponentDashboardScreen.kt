@@ -1,8 +1,14 @@
 package com.compose.weather.view.dashboard
 
 import android.util.Log
+import androidx.compose.foundation.Image
+import androidx.compose.foundation.background
+import androidx.compose.foundation.clickable
+import androidx.compose.foundation.layout.Box
 import androidx.compose.foundation.layout.fillMaxWidth
-import androidx.compose.foundation.layout.padding
+import androidx.compose.foundation.layout.height
+import androidx.compose.foundation.layout.size
+import androidx.compose.foundation.shape.CircleShape
 import androidx.compose.material.*
 import androidx.compose.material.icons.Icons
 import androidx.compose.material.icons.filled.Menu
@@ -11,11 +17,17 @@ import androidx.compose.material.icons.rounded.Settings
 import androidx.compose.material3.NavigationBar
 import androidx.compose.material3.NavigationBarItem
 import androidx.compose.runtime.*
+import androidx.compose.ui.Alignment
 import androidx.compose.ui.Modifier
+import androidx.compose.ui.draw.clip
+import androidx.compose.ui.graphics.Color
+import androidx.compose.ui.layout.ContentScale
+import androidx.compose.ui.res.painterResource
 import androidx.compose.ui.res.stringResource
 import androidx.compose.ui.text.font.FontWeight
 import androidx.compose.ui.tooling.preview.Preview
 import androidx.compose.ui.unit.dp
+import androidx.compose.ui.unit.sp
 import androidx.navigation.NavBackStackEntry
 import androidx.navigation.NavHostController
 import androidx.navigation.compose.currentBackStackEntryAsState
@@ -122,21 +134,44 @@ private fun DrawerContent(onItemClick: (route: String) -> Unit) {
     val list by remember {
         mutableStateOf(listOf(R.string.profile, R.string.about))
     }
+
+    Box(
+        modifier = Modifier
+            .fillMaxWidth()
+            .height(200.dp),
+        contentAlignment = Alignment.Center
+    ) {
+        Image(
+            painter = painterResource(id = R.drawable.ic_launcher_foreground),
+            contentDescription = "Profile Pic",
+            contentScale = ContentScale.Crop,
+            modifier = Modifier
+                .size(120.dp)
+                .clip(CircleShape)
+                .background(Color.Cyan)
+        )
+    }
+
     list.forEach { string ->
-        Button(
+        Box(
             modifier = Modifier
                 .fillMaxWidth()
-                .padding(10.dp),
-            onClick = {
-                if (string == R.string.profile) {
-                    onItemClick.invoke(Route.HomeNav.Profile.route)
-                } else if (string == R.string.about) {
-                    onItemClick.invoke(Route.HomeNav.About.route)
-                }
-
-            }) {
-            Text(text = stringResource(id = string))
+                .height(48.dp)
+                .clickable {
+                    if (string == R.string.profile) {
+                        onItemClick.invoke(Route.HomeNav.Profile.route)
+                    } else if (string == R.string.about) {
+                        onItemClick.invoke(Route.HomeNav.About.route)
+                    }
+                },
+            contentAlignment = Alignment.Center
+        ) {
+            Text(
+                text = stringResource(id = string),
+                fontSize = 18.sp
+            )
         }
+        Divider()
     }
 }
 
@@ -153,7 +188,10 @@ private fun BottomBar(
             NavigationBarItem(
                 selected = selected,
                 onClick = {
-                    navController.navigate(item.route)
+                    navController.navigate(item.route) {
+                        // To avoid calling same destination multiple times
+                        launchSingleTop = true
+                    }
                 },
                 label = {
                     Text(

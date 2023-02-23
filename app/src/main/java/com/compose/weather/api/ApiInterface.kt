@@ -17,8 +17,8 @@ interface ApiInterface {
     //    @GET(".") //If our base URL is same as final URL
     @GET("weather")
     suspend fun getWeatherDetail(
-        @Query("lat") lat: Float,
-        @Query("lon") lon: Float,
+        @Query("lat") lat: Double,
+        @Query("lon") lon: Double,
         @Query("appid") appid: String = BuildConfig.WEATHER_API_KEY
-    ): Response<Unit>
+    ): Response<CityWeatherResponse>
 }
