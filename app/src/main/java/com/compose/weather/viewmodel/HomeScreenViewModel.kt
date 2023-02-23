@@ -1,6 +1,9 @@
 package com.compose.weather.viewmodel
 
+import android.util.Log
 import com.compose.weather.model.ItemCity
+import com.compose.weather.model.dto.toCityWeather
+import com.compose.weather.model.view.CityWeather
 import com.compose.weather.repository.WeatherRepository
 import dagger.hilt.android.lifecycle.HiltViewModel
 import kotlinx.coroutines.flow.MutableStateFlow
@@ -37,6 +40,36 @@ class HomeScreenViewModel @Inject constructor(private val weatherRepository: Wea
                 it.isSelected = it.city == city.city
                 it.copy()
             }
+        }
+
+        getCityWeather(city = city.city)
+    }
+
+
+    private val _cityWeather = MutableStateFlow<CityWeather?>(null)
+    val cityWeather = _cityWeather.asStateFlow()
+
+    private fun getCityWeather(city: String) = launchWithViewModelScope(
+        call = {
+
+            weatherRepository.getCityWeather(city = city).let { response ->
+                if (response.isSuccessful) {
+                    response.body()?.let {city->
+                        _cityWeather.update { city.toCityWeather() }
+                    }
+                } else {
+                    _cityWeather.update { null }
+                }
+            }
+        },
+        exceptionCallback = { message ->
+            Log.d("CityWeather", "City Weather Exception: $message")
+        }
+    )
+
+    init {
+        _cityList.value.firstOrNull { it.isSelected }?.let {
+            getCityWeather(it.city)
         }
     }
 }

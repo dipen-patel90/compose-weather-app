@@ -42,6 +42,7 @@ fun ComponentDashboardScreen(
                 title = "Home",
                 route = Route.HomeNav.Home.route,
                 icon = Icons.Rounded.Home,
+                header = "Hello $username",
             ),
             BottomNavItem(
                 title = "Settings",
@@ -65,7 +66,7 @@ fun ComponentDashboardScreen(
         scaffoldState = scaffoldState,
         topBar = {
             if (topBottomBarDrawer.contains(current)) {
-                val title = navItems.find { it.route == current }?.title
+                val title = navItems.find { it.route == current }?.header
                 TopBar(title) {
                     coroutineScope.launch {
                         scaffoldState.drawerState.open()
