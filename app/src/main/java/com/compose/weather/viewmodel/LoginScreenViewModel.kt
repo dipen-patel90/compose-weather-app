@@ -6,10 +6,7 @@ import com.compose.weather.view.login.LoginState
 import com.compose.weather.view.login.UILogin
 import dagger.hilt.android.lifecycle.HiltViewModel
 import kotlinx.coroutines.delay
-import kotlinx.coroutines.flow.Flow
-import kotlinx.coroutines.flow.MutableStateFlow
-import kotlinx.coroutines.flow.combine
-import kotlinx.coroutines.flow.update
+import kotlinx.coroutines.flow.*
 import javax.inject.Inject
 
 @HiltViewModel
@@ -18,17 +15,18 @@ class LoginScreenViewModel @Inject constructor(private val weatherRepository: We
 
     val uiLogin = UILogin()
 
-    val loginState = MutableStateFlow<LoginState>(LoginState.Default)
+    private val _loginState = MutableStateFlow<LoginState>(LoginState.Default)
+    val loginState = _loginState.asStateFlow()
 
     fun login() = launchWithViewModelScope(
         call = {
-            loginState.update { LoginState.Loading }
+            _loginState.update { LoginState.Loading }
 
             // Dummy delay, Instead of this we can implement actual login API
             delay(3000)
             SharedPrefsManager.isUserLoggedIn = true
             SharedPrefsManager.userId = uiLogin.username.state.value
-            loginState.update { LoginState.Success }
+            _loginState.update { LoginState.Success }
 
 //            weatherRepository.getWeatherDetail(33.44F, -94.04F).let { response ->
 //                if (response.isSuccessful) {
@@ -41,7 +39,7 @@ class LoginScreenViewModel @Inject constructor(private val weatherRepository: We
 //            }
         },
         exceptionCallback = { message ->
-            loginState.update { LoginState.Failure(message) }
+            _loginState.update { LoginState.Failure(message) }
         }
     )
 

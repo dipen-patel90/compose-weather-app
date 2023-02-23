@@ -1,6 +1,8 @@
 package com.compose.weather.view.dashboard
 
 import android.util.Log
+import androidx.compose.foundation.layout.fillMaxWidth
+import androidx.compose.foundation.layout.padding
 import androidx.compose.material.*
 import androidx.compose.material.icons.Icons
 import androidx.compose.material.icons.filled.Menu
@@ -8,13 +10,12 @@ import androidx.compose.material.icons.rounded.Home
 import androidx.compose.material.icons.rounded.Settings
 import androidx.compose.material3.NavigationBar
 import androidx.compose.material3.NavigationBarItem
-import androidx.compose.runtime.Composable
-import androidx.compose.runtime.State
-import androidx.compose.runtime.remember
-import androidx.compose.runtime.rememberCoroutineScope
+import androidx.compose.runtime.*
+import androidx.compose.ui.Modifier
 import androidx.compose.ui.res.stringResource
 import androidx.compose.ui.text.font.FontWeight
 import androidx.compose.ui.tooling.preview.Preview
+import androidx.compose.ui.unit.dp
 import androidx.navigation.NavBackStackEntry
 import androidx.navigation.NavHostController
 import androidx.navigation.compose.currentBackStackEntryAsState
@@ -117,15 +118,24 @@ private fun TopBar(title: String?, onNavIconClick: () -> Unit) {
 
 @Composable
 private fun DrawerContent(onItemClick: (route: String) -> Unit) {
-    Button(onClick = {
-        onItemClick.invoke(Route.HomeNav.Profile.route)
-    }) {
-        Text(text = stringResource(id = R.string.profile))
+    val list by remember {
+        mutableStateOf(listOf(R.string.profile, R.string.about))
     }
-    Button(onClick = {
-        onItemClick.invoke(Route.HomeNav.About.route)
-    }) {
-        Text(text = stringResource(id = R.string.about))
+    list.forEach { string ->
+        Button(
+            modifier = Modifier
+                .fillMaxWidth()
+                .padding(10.dp),
+            onClick = {
+                if (string == R.string.profile) {
+                    onItemClick.invoke(Route.HomeNav.Profile.route)
+                } else if (string == R.string.about) {
+                    onItemClick.invoke(Route.HomeNav.About.route)
+                }
+
+            }) {
+            Text(text = stringResource(id = string))
+        }
     }
 }
 

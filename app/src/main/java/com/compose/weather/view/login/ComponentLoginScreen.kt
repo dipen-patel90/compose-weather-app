@@ -90,12 +90,23 @@ private fun Content(vm: LoginScreenViewModel) {
         horizontalAlignment = Alignment.CenterHorizontally
     ) {
         SpaceTop(20.dp)
-        OutlinedTextFieldWithError(vm.uiLogin.username, R.string.username)
+        OutlinedTextFieldWithError(
+            uiTextField = vm.uiLogin.username,
+            label = R.string.username,
+            hint = R.string.username_hint
+        )
         SpaceTop(12.dp)
-        OutlinedTextFieldWithError(vm.uiLogin.password, R.string.password, true)
+        OutlinedTextFieldWithError(
+            uiTextField = vm.uiLogin.password,
+            label = R.string.password,
+            hint = R.string.password_hint,
+            isPassword = true
+        )
 
-        SpaceTop(12.dp)
+        SpaceTop(20.dp)
         Button(
+            modifier = Modifier
+                .fillMaxWidth(0.8f),
             onClick = {
                 vm.login()
             },

@@ -6,7 +6,9 @@
     <string name="today">Today</string>
 
     <string name="username">Username</string>
+    <string name="username_hint">Enter any 4 char</string>
     <string name="password">Password</string>
+    <string name="password_hint">Enter any 8 char</string>
     <string name="login">Login</string>
     <string name="username_length_error">Username must be at least 4 character long</string>
     <string name="password_length_error">Password must be at least 8 character long</string>

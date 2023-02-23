@@ -18,7 +18,7 @@ import com.compose.weather.view.login.UITextField
 
 @OptIn(ExperimentalMaterial3Api::class)
 @Composable
-fun OutlinedTextFieldWithError(uiTextField: UITextField, label: Int, isPassword: Boolean = false) {
+fun OutlinedTextFieldWithError(uiTextField: UITextField, label: Int, hint: Int, isPassword: Boolean = false) {
     OutlinedTextField(
         modifier = Modifier.fillMaxWidth(fraction = 0.8f),
         label = { Text(stringResource(id = label)) },
@@ -29,6 +29,7 @@ fun OutlinedTextFieldWithError(uiTextField: UITextField, label: Int, isPassword:
         isError = uiTextField.showError,
         visualTransformation = if (isPassword) PasswordVisualTransformation() else VisualTransformation.None,
         keyboardOptions = if (isPassword) KeyboardOptions(keyboardType = KeyboardType.Password) else KeyboardOptions.Default,
+        placeholder = { Text(stringResource(id = hint)) }
     )
 
     if (uiTextField.showError) {
