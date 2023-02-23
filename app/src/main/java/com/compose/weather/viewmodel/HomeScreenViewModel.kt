@@ -6,8 +6,8 @@ import android.util.Log
 import com.compose.weather.common.LatLon
 import com.compose.weather.model.ItemCity
 import com.compose.weather.model.dto.toCityWeather
-import com.compose.weather.model.view.CityWeather
 import com.compose.weather.repository.WeatherRepository
+import com.compose.weather.view.login.WeatherCardState
 import com.google.android.gms.location.LocationServices
 import dagger.hilt.android.lifecycle.HiltViewModel
 import kotlinx.coroutines.flow.MutableStateFlow
@@ -22,12 +22,12 @@ class HomeScreenViewModel @Inject constructor(private val weatherRepository: Wea
     private val _cityList = MutableStateFlow(
         listOf(
             ItemCity("Colombo"),
-            ItemCity("Delhi", isSelected = true),
             ItemCity("Hong Kong"),
             ItemCity("London"),
             ItemCity("Mexico City"),
             ItemCity("Moscow"),
             ItemCity("New York"),
+            ItemCity("Pune", isSelected = true),
             ItemCity("Paris"),
             ItemCity("Singapore"),
             ItemCity("Seoul"),
@@ -50,24 +50,26 @@ class HomeScreenViewModel @Inject constructor(private val weatherRepository: Wea
     }
 
 
-    private val _cityWeather = MutableStateFlow<CityWeather?>(null)
+    private val _cityWeather = MutableStateFlow<WeatherCardState>(WeatherCardState.Default)
     val cityWeather = _cityWeather.asStateFlow()
 
     private fun getCityWeather(city: String) = launchWithViewModelScope(
         call = {
+            _cityWeather.update { WeatherCardState.Loading }
 
             weatherRepository.getCityWeather(city = city).let { response ->
                 if (response.isSuccessful) {
                     response.body()?.let { city ->
-                        _cityWeather.update { city.toCityWeather() }
+                        _cityWeather.update { WeatherCardState.Success(city.toCityWeather()) }
                     }
                 } else {
-                    _cityWeather.update { null }
+                    _cityWeather.update { WeatherCardState.Failure(response.message()) }
                 }
             }
         },
         exceptionCallback = { message ->
             Log.d("CityWeather", "City Weather Exception: $message")
+            _cityWeather.update { WeatherCardState.Failure(message) }
         }
     )
 
@@ -89,24 +91,26 @@ class HomeScreenViewModel @Inject constructor(private val weatherRepository: Wea
         }
     }
 
-    private val _currentCityWeather = MutableStateFlow<CityWeather?>(null)
+    private val _currentCityWeather = MutableStateFlow<WeatherCardState>(WeatherCardState.Default)
     val currentCityWeather = _currentCityWeather.asStateFlow()
 
     private fun getCurrentCityWeather(coordinate: LatLon) = launchWithViewModelScope(
         call = {
+            _currentCityWeather.update { WeatherCardState.Loading }
 
             weatherRepository.getWeatherDetail(coordinate.lat, coordinate.lon).let { response ->
                 if (response.isSuccessful) {
                     response.body()?.let { city ->
-                        _currentCityWeather.update { city.toCityWeather() }
+                        _currentCityWeather.update { WeatherCardState.Success(city.toCityWeather()) }
                     }
                 } else {
-                    _currentCityWeather.update { null }
+                    _currentCityWeather.update { WeatherCardState.Failure(response.message()) }
                 }
             }
         },
         exceptionCallback = { message ->
             Log.d("CityWeather", "Current City Weather Exception: $message")
+            _currentCityWeather.update { WeatherCardState.Failure(message) }
         }
     )
 

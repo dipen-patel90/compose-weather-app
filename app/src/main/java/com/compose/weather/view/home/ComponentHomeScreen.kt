@@ -17,8 +17,9 @@ import androidx.hilt.navigation.compose.hiltViewModel
 import androidx.lifecycle.viewmodel.compose.viewModel
 import com.compose.weather.common.getStateValue
 import com.compose.weather.model.ItemCity
-import com.compose.weather.model.view.CityWeather
 import com.compose.weather.view.common.CityGridItem
+import com.compose.weather.view.common.Loader
+import com.compose.weather.view.login.WeatherCardState
 import com.compose.weather.viewmodel.HomeScreenViewModel
 import com.google.accompanist.permissions.ExperimentalPermissionsApi
 import com.google.accompanist.permissions.isGranted
@@ -75,26 +76,36 @@ private fun CityGrid(cityList: List<ItemCity>, onItemClick: (city: ItemCity) -> 
 }
 
 @Composable
-private fun CityWeatherCard(cityWeather: CityWeather?) {
-    cityWeather?.let {
-        Card(
-            Modifier
-                .padding(12.dp)
-                .fillMaxWidth()
-        ) {
+private fun CityWeatherCard(state: WeatherCardState) {
+    when (state) {
+        WeatherCardState.Default -> {}
+        is WeatherCardState.Failure -> {
+            val message = state.errorMessage
+            Text(text = message)
+        }
+        WeatherCardState.Loading -> Loader(fixHeight = true)
+        is WeatherCardState.Success -> {
+            state.response.let { cityWeather ->
+                Card(
+                    Modifier
+                        .padding(12.dp)
+                        .fillMaxWidth()
+                ) {
 
-            Column(
-                Modifier
-                    .padding(12.dp)
-            ) {
-                Text(text = cityWeather.city)
-                Text(text = cityWeather.lat)
-                Text(text = cityWeather.lon)
-                Text(text = cityWeather.weather)
-                Text(text = cityWeather.weatherDescription)
-                CoilImage(
-                    imageModel = { cityWeather.icon }
-                )
+                    Column(
+                        Modifier
+                            .padding(12.dp)
+                    ) {
+                        Text(text = cityWeather.city)
+                        Text(text = cityWeather.lat)
+                        Text(text = cityWeather.lon)
+                        Text(text = cityWeather.weather)
+                        Text(text = cityWeather.weatherDescription)
+                        CoilImage(
+                            imageModel = { cityWeather.icon }
+                        )
+                    }
+                }
             }
         }
     }

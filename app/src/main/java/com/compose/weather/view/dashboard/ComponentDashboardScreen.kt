@@ -113,6 +113,8 @@ fun ComponentDashboardScreen(
 @Composable
 private fun TopBar(title: String?, onNavIconClick: () -> Unit) {
     TopAppBar(
+        backgroundColor = androidx.compose.material3.MaterialTheme.colorScheme.primary,
+        contentColor = androidx.compose.material3.MaterialTheme.colorScheme.onPrimary,
         title = { Text(text = title ?: String.empty()) },
         navigationIcon = {
             IconButton(
