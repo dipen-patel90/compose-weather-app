@@ -59,7 +59,9 @@ data class CityWeatherResponse(
         @SerializedName("temp_max")
         val tempMax: Double?,
         @SerializedName("temp_min")
-        val tempMin: Double?
+        val tempMin: Double?,
+        @SerializedName("sea_level")
+        val seaLevel: Double?
     )
 
     data class Sys(
@@ -97,12 +99,21 @@ data class CityWeatherResponse(
 fun CityWeatherResponse.toCityWeather(): CityWeather {
     val wt = weather?.firstOrNull()
 
+    val city = name ?: String.empty()
+    val country = sys?.country ?: String.empty()
+
     return CityWeather(
+        location = "$city [$country]",
         city = name ?: String.empty(),
+        country = sys?.country ?: String.empty(),
         lat = coord?.lat?.toString() ?: String.empty(),
         lon = coord?.lon?.toString() ?: String.empty(),
         weather = wt?.main ?: String.empty(),
         weatherDescription = wt?.description ?: String.empty(),
-        icon = "$IMAGE_URL${wt?.icon ?: String.empty()}@2x.png"
+        temperature = main?.temp?.toString() ?: String.empty(),
+        seaLevel = main?.seaLevel?.toString() ?: String.empty(),
+        windSpeed = wind?.speed?.toString() ?: String.empty(),
+        date = dt?.toString() ?: String.empty(),
+        icon = "$IMAGE_URL${wt?.icon ?: String.empty()}.png"
     )
 }

@@ -11,10 +11,12 @@ import androidx.compose.runtime.Composable
 import androidx.compose.ui.Alignment
 import androidx.compose.ui.Modifier
 import androidx.compose.ui.platform.LocalContext
+import androidx.compose.ui.res.stringResource
 import androidx.compose.ui.tooling.preview.Preview
 import androidx.compose.ui.unit.dp
+import androidx.constraintlayout.compose.ConstraintLayout
 import androidx.hilt.navigation.compose.hiltViewModel
-import androidx.lifecycle.viewmodel.compose.viewModel
+import com.compose.weather.R
 import com.compose.weather.common.getStateValue
 import com.compose.weather.model.ItemCity
 import com.compose.weather.view.common.CityGridItem
@@ -41,7 +43,10 @@ fun ComponentHomeScreen(username: String, vm: HomeScreenViewModel = hiltViewMode
 
         if (cameraPermissionState.status.isGranted) {
             vm.getLocation(LocalContext.current)
-            CityWeatherCard(getStateValue(state = vm.currentCityWeather))
+            CityWeatherCard(
+                state = getStateValue(state = vm.currentCityWeather),
+                isCurrentLocation = true
+            )
         } else {
             EmptyWeatherCard {
                 cameraPermissionState.launchPermissionRequest()
@@ -52,15 +57,14 @@ fun ComponentHomeScreen(username: String, vm: HomeScreenViewModel = hiltViewMode
             vm.setCitySelected(it)
         }
 
-        CityWeatherCard(getStateValue(state = vm.cityWeather))
+        CityWeatherCard(state = getStateValue(state = vm.cityWeather), isCurrentLocation = false)
     }
-
 }
 
 @OptIn(ExperimentalLayoutApi::class)
 @Composable
 private fun CityGrid(cityList: List<ItemCity>, onItemClick: (city: ItemCity) -> Unit) {
-    Card(Modifier.padding(12.dp)) {
+    Card(Modifier.padding(12.dp), elevation = 4.dp) {
         FlowRow(
             maxItemsInEachRow = 4,
             modifier = Modifier.fillMaxWidth(),
@@ -76,7 +80,7 @@ private fun CityGrid(cityList: List<ItemCity>, onItemClick: (city: ItemCity) -> 
 }
 
 @Composable
-private fun CityWeatherCard(state: WeatherCardState) {
+private fun CityWeatherCard(state: WeatherCardState, isCurrentLocation: Boolean) {
     when (state) {
         WeatherCardState.Default -> {}
         is WeatherCardState.Failure -> {
@@ -89,21 +93,67 @@ private fun CityWeatherCard(state: WeatherCardState) {
                 Card(
                     Modifier
                         .padding(12.dp)
-                        .fillMaxWidth()
+                        .fillMaxWidth(),
+                    elevation = 4.dp
                 ) {
 
-                    Column(
-                        Modifier
+                    ConstraintLayout(
+                        modifier = Modifier
+                            .fillMaxWidth()
                             .padding(12.dp)
                     ) {
-                        Text(text = cityWeather.city)
-                        Text(text = cityWeather.lat)
-                        Text(text = cityWeather.lon)
-                        Text(text = cityWeather.weather)
-                        Text(text = cityWeather.weatherDescription)
-                        CoilImage(
-                            imageModel = { cityWeather.icon }
-                        )
+                        val (cityCountry, yourLocation, weather, weatherDesc, infoRow, icon) = createRefs()
+
+                        Text(
+                            text = cityWeather.location,
+                            modifier = Modifier.constrainAs(cityCountry) {
+                                end.linkTo(yourLocation.end)
+                                start.linkTo(yourLocation.start)
+                            })
+
+                        if (isCurrentLocation) {
+                            Text(
+                                text = stringResource(id = R.string.your_location),
+                                modifier = Modifier.constrainAs(yourLocation) {
+                                    top.linkTo(cityCountry.bottom)
+                                    start.linkTo(parent.start)
+                                })
+                        }
+
+                        CoilImage(modifier = Modifier.constrainAs(icon) {
+                            end.linkTo(weather.start)
+                        }, imageModel = { cityWeather.icon })
+
+                        Text(text = cityWeather.weather, modifier = Modifier.constrainAs(weather) {
+                            end.linkTo(weatherDesc.end)
+                            start.linkTo(weatherDesc.start)
+                        })
+
+                        Text(
+                            text = cityWeather.weatherDescription,
+                            modifier = Modifier.constrainAs(weatherDesc) {
+                                top.linkTo(weather.bottom)
+                                end.linkTo(parent.end)
+                            })
+
+                        Row(
+                            modifier = Modifier
+                                .fillMaxWidth()
+                                .padding(top = 20.dp)
+                                .constrainAs(infoRow) {
+                                    start.linkTo(parent.start)
+                                    end.linkTo(parent.end)
+                                    top.linkTo(weatherDesc.bottom)
+                                },
+                            horizontalArrangement = Arrangement.SpaceEvenly
+                        ) {
+                            TwoText(
+                                stringResource(id = R.string.temperature),
+                                cityWeather.temperature
+                            )
+                            TwoText(stringResource(id = R.string.sea_level), cityWeather.seaLevel)
+                            TwoText(stringResource(id = R.string.wind_speed), cityWeather.windSpeed)
+                        }
                     }
                 }
             }
@@ -128,45 +178,34 @@ private fun EmptyWeatherCard(askForPermission: () -> Unit) {
             contentAlignment = Alignment.Center
         ) {
             Column(horizontalAlignment = Alignment.CenterHorizontally) {
-                Text(text = "Grant permission to view current location weather.")
-                Text(text = "Press to Grant Permission.")
+                Text(text = stringResource(R.string.grant_permission))
+                Text(text = stringResource(R.string.press_to_grant_permission))
             }
         }
     }
 }
 
+@Composable
+private fun TwoText(header: String, value: String) {
+    Card(
+        modifier = Modifier
+            .wrapContentSize()
+            .defaultMinSize(100.dp, 100.dp),
+        elevation = 2.dp
+    ) {
+        Column(
+            verticalArrangement = Arrangement.Center,
+            horizontalAlignment = Alignment.CenterHorizontally
+        ) {
+            Text(text = header)
+            Text(text = value)
+        }
+    }
+
+}
+
 @Preview(showBackground = true)
 @Composable
 private fun Preview() {
-//    CityGrid(
-//        listOf(
-//            ItemCity("Delhi"),
-//            ItemCity("New York"),
-//            ItemCity("Mexico City"),
-//            ItemCity("Moscow"),
-//            ItemCity("Paris"),
-//            ItemCity("London"),
-//            ItemCity("Hong Kong"),
-//            ItemCity("Toronto"),
-//            ItemCity("Singapore"),
-//            ItemCity("Zhengzhou"),
-//            ItemCity("Busan"),
-//            ItemCity("Seoul")
-//        )
-//    ) {}
 
-//    CityWeatherCard(
-//        CityWeather(
-//            city = "London",
-//            lat = "0.1f",
-//            lon = "0.2f",
-//            weather = "Cold",
-//            weatherDescription = "Feels like cold",
-//            icon = "04d"
-//        )
-//    )
-
-//    EmptyWeatherCard() {}
-
-    ComponentHomeScreen("Dipen", viewModel())
 }

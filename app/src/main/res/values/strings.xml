@@ -15,7 +15,13 @@
     <string name="profile">Profile</string>
     <string name="about">About</string>
     <string name="logout">Logout</string>
+    <string name="your_location">Your location</string>
+    <string name="temperature">Temperature</string>
+    <string name="sea_level">Sea Level</string>
+    <string name="wind_speed">Wind Speed</string>
 
-    <string name="empty"/>
+    <string name="empty" />
+    <string name="grant_permission">Grant permission to view current location weather.</string>
+    <string name="press_to_grant_permission">Press to Grant Permission.</string>
 
 </resources>
